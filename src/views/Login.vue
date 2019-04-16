@@ -9,8 +9,9 @@
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
-      <el-button @click.native.prevent="handleDefault">重置</el-button>
+      <el-button type="primary" style="width:40%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
+      <el-button type="primary" style="width:40%;" @click.native.prevent="handleSubmit2" :loading="logining">注册</el-button>
+      <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
 </template>
@@ -42,11 +43,12 @@
     },
     methods: {
       handleReset2() {
+
         this.$refs.ruleForm2.resetFields();
       },
         handleDefault(){
             getDefault().then((res) => {
-                alert("aaa");
+                alert(res.data.message);
             });
         },
       handleSubmit2(ev) {
@@ -60,7 +62,10 @@
             requestLogin(loginParams).then(data => {
               this.logining = false;
               //NProgress.done();
-              let { msg, code, user } = data;
+              // let { msg, code, user } = data;
+              let msg = data.message;
+              let code = data.code;
+              let user = data.data;
               if (code !== 200) {
                 this.$message({
                   message: msg,

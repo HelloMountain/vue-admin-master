@@ -45,6 +45,7 @@ export default {
 
     //获取用户列表
     mock.onGet('/user/list').reply(config => {
+      alert("aaaaaaaa");
       let {name} = config.params;
       let mockUsers = _Users.filter(user => {
         if (name && user.name.indexOf(name) == -1) return false;

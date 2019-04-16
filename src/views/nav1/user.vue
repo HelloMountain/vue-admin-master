@@ -14,22 +14,22 @@
 
 		<!--列表-->
 		<template>
-			<el-table :data="users" highlight-current-row v-loading="loading" style="width: 100%;">
+				<el-table :data="servers" highlight-current-row v-loading="loading" style="width: 100%;">
 				<el-table-column type="index" width="60">
 				</el-table-column>
-				<el-table-column prop="id" label="服务器编号" width="150" sortable>
+				<el-table-column prop="id" label="服务器编号" width="120" sortable>
 				</el-table-column>
 				<el-table-column prop="name" label="服务器名" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="sex" label="主机" width="100"sortable>
+				<el-table-column prop="host" label="主机" width="100"sortable>
 				</el-table-column>
-				<el-table-column prop="age" label="日志地址" width="120" sortable>
+				<el-table-column prop="logPath" label="日志地址" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="birth" label="创建时间" width="120" sortable>
+				<el-table-column prop="createdAt" label="创建时间" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="addr" label="创建者" min-width="120" sortable>
+				<el-table-column prop="updatedAt" label="创建者" width="100" sortable>
 				</el-table-column>
-				<el-table-column prop="published" label="是否运行" min-width="100" sortable>
+				<el-table-column prop="published" label="是否运行" width="100" sortable>
 				</el-table-column>
 			</el-table>
 		</template>
@@ -38,6 +38,7 @@
 </template>
 <script>
 	import { getUserList } from '../../api/api';
+	import { getServerListPage } from '../../api/api';
     //import NProgress from 'nprogress'  //进度条
 	export default {
 		data() {
@@ -46,7 +47,8 @@
 					name: ''
 				},
 				loading: false,
-				users: [
+				// users: [
+				servers: [
 				]
 			}
 		},
@@ -66,12 +68,18 @@
 				this.loading = true;
 				// alert(para.name);
 				//NProgress.start();
-
-				getUserList(para).then((res) => {
-					this.users = res.data.users;
-					this.loading = false;
-					//NProgress.done();
-				});
+				getServerListPage(para).then((res) => {
+                    this.servers = res.data.data;
+                    this.loading = false;
+                    //NProgress.done();
+                });
+				//
+				// getUserList(para).then((res) => {
+				//     alert("2222");
+				// 	this.servers = res.data.users;
+				// 	this.loading = false;
+				// 	//NProgress.done();
+				// });
 			}
 		},
 		mounted() {
