@@ -14,12 +14,15 @@
     "echarts": "^3.3.2",
     "element-ui": "^1.2.8",
     "font-awesome": "^4.7.0",
+    "moment": "^2.24.0",
     "nprogress": "^0.2.0",
     "vue": "^2.2.2",
     "vue-router": "^2.3.0",
+    "vue2-datepick": "^3.0.10",
     "vuex": "^2.0.0-rc.6",
     "webpack-hmr": "^1.0.2",
-    "webpack-loader": "0.0.1"
+    "webpack-loader": "0.0.1",
+    "z-date-picker": "^1.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

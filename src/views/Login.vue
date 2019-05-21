@@ -19,10 +19,13 @@
 <script>
   import { requestLogin } from '../api/api';
   import { getDefault }from '../api/api';
+  import { mapActions } from 'vuex'
+
   //import NProgress from 'nprogress'
   export default {
     data() {
       return {
+          routeData: [],
         logining: false,
         ruleForm2: {
           account: 'admin',
@@ -42,6 +45,7 @@
       };
     },
     methods: {
+        ...mapActions({add_Routes: 'add_Routes'}),
       handleReset2() {
 
         this.$refs.ruleForm2.resetFields();
@@ -55,7 +59,7 @@
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            //_this.$router.replace('/table');
+            // _this.$router.replace('/table');
             this.logining = true;
             //NProgress.start();
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
@@ -66,14 +70,137 @@
               let msg = data.message;
               let code = data.code;
               let user = data.data;
+              console.log(user);
               if (code !== 200) {
                 this.$message({
                   message: msg,
                   type: 'error'
                 });
               } else {
+
+                  // if(data.data.role === 'user'){
+                  //     // 将路由信息，菜单信息，用户信息存到sessionStorage里
+                  //     sessionStorage.setItem('menuData', JSON.stringify(res.data.navData))
+                  //     sessionStorage.setItem('user', this.user.username)
+                  //     sessionStorage.setItem('routes', JSON.stringify(res.data.routerData))
+                  // }
+                  // else if (data.data.role === 'admin'){
+                  //     // 将路由信息，菜单信息，用户信息存到sessionStorage里
+                  //     sessionStorage.setItem('menuData', JSON.stringify(res.data.navData))
+                  //     sessionStorage.setItem('user', this.user.username)
+                  //     sessionStorage.setItem('routes', JSON.stringify(res.data.routerData))
+                  // }
+                  // this.add_Routes(res.data.routerData) //触发vuex里的增加路由
+
                 sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/table' });
+                sessionStorage.setItem('role', JSON.stringify(user.role));
+
+                  // { path: '/main', component: Main, name: '主页', hidden: true },
+                  // { path: '/table', component: Table, name: 'User' },
+                let adminData = [
+                    {
+                        path: '/',
+                        component: 'Home',
+                        name: '安装引导',
+                        iconCls: 'fa fa-id-card-o',
+                        children: [
+                            { path: '/page4', component: 'nav2-Page4', name: '安装引导' },
+                        ]
+                    },
+                    {
+                        path: '/',
+                        component: 'Home',
+                        name: '管理信息',
+                        iconCls: 'el-icon-message',//图标样式class
+                        children: [
+                            { path: '/main', component: 'Main', name: '主页', hidden: true },
+                            { path: '/table', component: 'nav1-Table', name: '用户信息' },
+                            { path: '/tableuser', component: 'nav1-TableServer', name: '服务器信息' },
+                            // { path: '/user', component: 'nav1-user', name: '列表' }
+                            // { path: '/privilege', component: 'nav1-privilege', name: '权限' }
+                        ]
+                    },
+                    {
+                        path: '/',
+                        component: 'Home',
+                        name: '数据可视化    ',
+                        iconCls: 'fa fa-bar-chart',
+                        children: [
+                            { path: '/echarts', component: 'charts-code', name: '网站状态码' },
+                            { path: '/echarts-topIP2', component: 'charts-topBrowser2', name: '浏览器占比' },
+                            { path: '/echarts-pvuv', component: 'charts-vPU', name: '活跃度与用户量'},
+                            { path: '/topIP', component: 'charts-topIP', name: 'Top访问量IP'},
+                            { path: '/map', component: 'charts-map', name: '访问分布图'},
+                            { path: '/response-time', component: 'charts-Responsetime', name: '重要访问页'}
+                        ]
+                    },
+                    {
+                        path: '*',
+                        hidden: true,
+                        redirect: { path: '/404' }
+                    }
+                  ];
+
+                  let userData = [
+                      {
+                          path: '/',
+                          component: 'Home',
+                          name: '安装引导',
+                          iconCls: 'fa fa-id-card-o',
+                          children: [
+                              { path: '/page4', component: 'nav2-Page4', name: '安装引导' },
+                          ]
+                      },
+                      {
+                          path: '/',
+                          name: '管理信息',
+                          component: 'Home',
+                          iconCls: 'el-icon-message',//图标样式class
+                          children: [
+                              { path: '/main', component: 'Main', name: '主页', hidden: true },
+                              // { path: '/table', component: 'nav1-Table', name: '用户信息' },
+                              // { path: '/tableuser', component: 'nav1-TableServer', name: '服务器信息' },
+                              { path: '/user', component: 'nav1-user', name: '服务器信息' }
+                              // { path: '/privilege', component: 'nav1-privilege', name: '权限' }
+                          ]
+                      },
+                      {
+                          path: '/',
+                          component: 'Home',
+                          name: '数据可视化    ',
+                          iconCls: 'fa fa-bar-chart',
+                          children: [
+                              { path: '/echarts', component: 'charts-code', name: '网站状态码' },
+                              // { path: '/echarts-topIP', component: topBrowser, name: 'topBrowser' },
+                              { path: '/echarts-topIP2', component: 'charts-topBrowser2', name: '浏览器占比' },
+                              { path: '/echarts-pvuv', component: 'charts-vPU', name: '活跃度与用户量'},
+                              { path: '/topIP', component: 'charts-topIP', name: 'Top访问量IP'},
+                              // { path: '/uv', component: uv, name: 'uv'},
+                              { path: '/map', component: 'charts-map', name: '访问分布图'},
+                              { path: '/response-time', component: 'charts-Responsetime', name: '重要访问页'}
+                          ]
+                      },
+                      {
+                          path: '*',
+                          hidden: true,
+                          redirect: { path: '/404' }
+                      }
+                  ];
+                  // this.routerData = require('../router/admin_data');
+                  // console.log(user.role == 'user');
+                  // console.log(user.role == 'user');
+                  if (user.role === 'admin'){
+                      this.routerData = adminData;
+                  } else {
+                      this.routerData = userData;
+                  }
+                  // console.log(this.routerData);
+                  // let test = JSON.stringify(userData);
+                  sessionStorage.setItem('routes', JSON.stringify(this.routerData));
+                  // console.log(10);
+                  // console.log(JSON.parse(sessionStorage.getItem('routes')));
+                this.add_Routes(this.routerData); //触发vuex里的增加路由
+                this.$router.push({ path: '/echarts' });
               }
             });
           } else {

@@ -23,10 +23,14 @@
 		<el-col :span="24" class="main">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<!--导航菜单-->
+				<!--{{$router.path}}-->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
 					 unique-opened router v-show="!collapsed">
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
+					<!--<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">-->
+					<template v-for="(item,index) in this.myroute" v-if="!item.hidden">
+						<!--{{$router.options.routes}}-->
+						<!--<el-submenu :index="index+''" v-if="!item.leaf">-->
+						<el-submenu :index="index+''">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu>
@@ -35,10 +39,11 @@
 				</el-menu>
 				<!--导航菜单-折叠后-->
 				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
-					<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
+					<!--<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">-->
+					<li v-for="(item,index) in this.myroute" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
 							<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
+							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
 								<li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>
 							</ul>
 						</template>
@@ -72,10 +77,11 @@
 </template>
 
 <script>
+    // console.log(sessionStorage.getItem("routes"));
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'NGINX LOG',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -88,10 +94,21 @@
 					type: [],
 					resource: '',
 					desc: ''
-				}
+				},
+				myroute: null
 			}
 		},
 		methods: {
+            myrouteInit() {
+                let role = sessionStorage.getItem('role');
+                // if (JSON.parse(role) == 'user') {
+                    // console.log(sessionStorage.getItem('routes'));
+                    this.myroute = JSON.parse(sessionStorage.getItem('routes'));
+				// }
+                // console.log(1);
+                // console.log(sessionStorage.getItem('role'));
+                console.log(JSON.parse(role) == 'user');
+			},
 			onSubmit() {
 				console.log('submit!');
 			},
@@ -110,7 +127,11 @@
 					//type: 'warning'
 				}).then(() => {
 					sessionStorage.removeItem('user');
+					sessionStorage.removeItem('role');
+					sessionStorage.removeItem('routes');
+
 					_this.$router.push('/login');
+					// console.log(_this.$router);
 				}).catch(() => {
 
 				});
@@ -126,12 +147,25 @@
 			}
 		},
 		mounted() {
+            this.myrouteInit();
+		    // this.myroute = [{
+            //     path: '/',
+            //     component: 'Home',
+            //     name: '管理信息',
+            //     iconCls: 'el-icon-message',//图标样式class
+            //     children: [
+            //         { path: '/main', component: 'Main', name: '主页', hidden: true },
+            //         { path: '/table', component: 'Table', name: 'User' },
+            //         { path: '/tableuser', component: 'TableServer', name: 'Server' }
+            //     ]
+            // }];
 			var user = sessionStorage.getItem('user');
 			if (user) {
-				user = JSON.parse(user);
+				// user = JSON.parse(user);
 				this.sysUserName = user.name || '';
 				this.sysUserAvatar = user.avatar || '';
 			}
+
 
 		}
 	}
@@ -140,7 +174,7 @@
 
 <style scoped lang="scss">
 	@import '~scss_vars';
-	
+
 	.container {
 		position: absolute;
 		top: 0px;

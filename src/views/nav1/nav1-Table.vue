@@ -23,12 +23,14 @@
 			</el-table-column>
 			<el-table-column prop="id" label="ID" width="80" sortable>
 			</el-table-column>
+			<el-table-column prop="role" label="角色" width="100" sortable>
+			</el-table-column>
 			<el-table-column prop="username" label="用户名" width="100" sortable>
 			</el-table-column>
 			<el-table-column prop="name" label="姓名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="password" label="密码" width="120" sortable>
-			</el-table-column>
+			<!--<el-table-column prop="password" label="密码" width="120" sortable>-->
+			<!--</el-table-column>-->
 			<!--<el-table-column prop="avatar" label="头像" width="120" sortable>-->
 			<!--</el-table-column>-->
 			<el-table-column prop="createdAt" label="创建时间" width="120" :formatter="formatCreateTime" sortable>
@@ -55,23 +57,17 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="用户名" prop="username">
+					<el-input v-model="editForm.username" auto-complete="off"></el-input>
+				</el-form-item>
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
+				<el-form-item label="是否发布">
+					<el-radio-group v-model="editForm.published">
+						<el-radio class="radio" :label="1">是</el-radio>
+						<el-radio class="radio" :label="0">否</el-radio>
 					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -83,23 +79,24 @@
 		<!--新增界面-->
 		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+				<el-form-item label="用户名" prop="username">
+					<el-input v-model="addForm.username" auto-complete="off"></el-input>
+				</el-form-item>
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="addForm.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
+				<el-form-item label="角色" prop="role">
+					<!--<el-input v-model="addForm.role" auto-complete="off"></el-input>-->
+					<el-radio-group v-model="addForm.role">
+						<el-radio class="radio" :label="1">user</el-radio>
+						<el-radio class="radio" :label="0">admin</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
+				<el-form-item label="是否发布">
+					<el-radio-group v-model="addForm.published">
+						<el-radio class="radio" :label="1">是</el-radio>
+						<el-radio class="radio" :label="0">否</el-radio>
+					</el-radio-group>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -138,10 +135,7 @@
 				editForm: {
 					id: 0,
 					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					published: 1,
 				},
 
 				addFormVisible: false,//新增界面是否显示
@@ -163,16 +157,21 @@
 			}
 		},
 		methods: {
+		    //定义的函数不会自动执行
+		    test(){
+		        alert("aaa");
+			},
+
 			//性别显示转换
 			formatSex: function (row, column) {
-				return row.published == true ? 'true' : row.published == false ? 'false' : '未知';
+				return row.published == true ? '是' : row.published == false ? '否' : '否';
 			},
 			//时间转换
             formatUpdateTime: function (row, column) {
                 return util.formatDate.format(new Date(row.updatedAt), 'yyyy-MM-dd')
             },
 			formatCreateTime: function (row, column) {
-                return util.formatDate.format(new Date(row.updatedAt), 'yyyy-MM-dd')
+                return util.formatDate.format(new Date(row.createdAt), 'yyyy-MM-dd')
             },
 
 			handleCurrentChange(val) {
@@ -242,7 +241,6 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
 							editUser(para).then((res) => {
 								this.editLoading = false;
 								//NProgress.done();
@@ -266,7 +264,6 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
 							addUser(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();

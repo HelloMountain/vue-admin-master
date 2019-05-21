@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
+import addRoutes from './addRoutes'
 
 Vue.use(Vuex)
 
@@ -22,8 +23,11 @@ const mutations = {
 
 // 创建 store 实例
 export default new Vuex.Store({
-    actions,
-    getters,
-    state,
-    mutations
+    modules: {
+        actions,
+        getters,
+        state,
+        mutations,
+        addRoutes
+    }
 })

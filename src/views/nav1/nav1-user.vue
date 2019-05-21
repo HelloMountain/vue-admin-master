@@ -17,7 +17,7 @@
 				<el-table :data="servers" highlight-current-row v-loading="loading" style="width: 100%;">
 				<el-table-column type="index" width="60">
 				</el-table-column>
-				<el-table-column prop="id" label="服务器编号" width="120" sortable>
+				<el-table-column prop="id" label="ID" width="80" sortable>
 				</el-table-column>
 				<el-table-column prop="name" label="服务器名" width="120" sortable>
 				</el-table-column>
@@ -25,11 +25,11 @@
 				</el-table-column>
 				<el-table-column prop="logPath" label="日志地址" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="createdAt" label="创建时间" width="120" sortable>
+				<el-table-column prop="createdAt" label="创建时间" width="120" :formatter="formatCreateTime" sortable>
 				</el-table-column>
-				<el-table-column prop="updatedAt" label="创建者" width="100" sortable>
+				<el-table-column prop="updatedAt" label="更新时间" width="120" :formatter="formatUpdateTime" sortable>
 				</el-table-column>
-				<el-table-column prop="published" label="是否运行" width="100" sortable>
+				<el-table-column prop="published" label="是否运行" width="120" :formatter="formatSex" sortable>
 				</el-table-column>
 			</el-table>
 		</template>
@@ -37,7 +37,8 @@
 	</section>
 </template>
 <script>
-	import { getUserList } from '../../api/api';
+    import util from '../../common/js/util'
+    import { getUserList } from '../../api/api';
 	import { getServerListPage } from '../../api/api';
     //import NProgress from 'nprogress'  //进度条
 	export default {
@@ -53,17 +54,27 @@
 			}
 		},
 		methods: {
+
+            //时间转换
+            formatUpdateTime: function (row, column) {
+                return util.formatDate.format(new Date(row.updatedAt), 'yyyy-MM-dd')
+            },
+            formatCreateTime: function (row, column) {
+                return util.formatDate.format(new Date(row.createdAt), 'yyyy-MM-dd')
+            },
 			//性别显示转换
 			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
+                return row.published == true ? '是' : row.published == false ? '否' : '否';
+            },
 			//获取用户列表
 			getUser: function () {
+			    // alert(sessionStorage.getItem("name"));
 			    //在javascript中我们通常使用var会发生变量提升，
 				// 即脚本开始运行时，变量已经存在了，但是没有值，所以会输出undefined，
                 //而let不会发生变量提升,这表示在声明它之前，变量是不存在的，这时如果用到它，就会抛出一个错误
 				let para = {
-					name: this.filters.name
+					name: this.filters.name,
+					userId: 1
 				};
 				this.loading = true;
 				// alert(para.name);
