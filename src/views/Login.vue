@@ -10,7 +10,7 @@
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:40%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
-      <el-button type="primary" style="width:40%;" @click.native.prevent="handleSubmit2" :loading="logining">注册</el-button>
+      <el-button type="primary" style="width:40%;" @click.native.prevent="handleReset2" :loading="logining">重置</el-button>
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
@@ -47,8 +47,9 @@
     methods: {
         ...mapActions({add_Routes: 'add_Routes'}),
       handleReset2() {
-
-        this.$refs.ruleForm2.resetFields();
+        // this.$refs.ruleForm2.resetFields();
+        this.ruleForm2.account = '';
+        this.ruleForm2.checkPass = '';
       },
         handleDefault(){
             getDefault().then((res) => {
@@ -76,7 +77,13 @@
                   message: msg,
                   type: 'error'
                 });
-              } else {
+              } else if(!user.published){
+                  this.$message({
+                      message: "您的访问权限被取消，请联系管理员",
+                      type: 'error'
+                  });
+              }
+                else {
 
                   // if(data.data.role === 'user'){
                   //     // 将路由信息，菜单信息，用户信息存到sessionStorage里
@@ -104,26 +111,13 @@
                         name: '安装引导',
                         iconCls: 'fa fa-id-card-o',
                         children: [
-                            { path: '/page4', component: 'nav2-Page4', name: '安装引导' },
+                            { path: '/page4', component: 'nav2-Page4', name: '收集客户端安装' },
                         ]
                     },
                     {
                         path: '/',
                         component: 'Home',
-                        name: '管理信息',
-                        iconCls: 'el-icon-message',//图标样式class
-                        children: [
-                            { path: '/main', component: 'Main', name: '主页', hidden: true },
-                            { path: '/table', component: 'nav1-Table', name: '用户信息' },
-                            { path: '/tableuser', component: 'nav1-TableServer', name: '服务器信息' },
-                            // { path: '/user', component: 'nav1-user', name: '列表' }
-                            // { path: '/privilege', component: 'nav1-privilege', name: '权限' }
-                        ]
-                    },
-                    {
-                        path: '/',
-                        component: 'Home',
-                        name: '数据可视化    ',
+                        name: '分析数据及可视化    ',
                         iconCls: 'fa fa-bar-chart',
                         children: [
                             { path: '/echarts', component: 'charts-code', name: '网站状态码' },
@@ -131,7 +125,27 @@
                             { path: '/echarts-pvuv', component: 'charts-vPU', name: '活跃度与用户量'},
                             { path: '/topIP', component: 'charts-topIP', name: 'Top访问量IP'},
                             { path: '/map', component: 'charts-map', name: '访问分布图'},
-                            { path: '/response-time', component: 'charts-Responsetime', name: '重要访问页'}
+                            {
+                                path: '/response-time',
+                                component: 'charts-Responsetime',
+                                name: '重要访问页',
+                                children: [
+                                    { path: '/echarts', component: 'charts-code', name: '网站状态码' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        path: '/',
+                        component: 'Home',
+                        name: '系统管理信息',
+                        iconCls: 'el-icon-message',//图标样式class
+                        children: [
+                            { path: '/main', component: 'Main', name: '主页', hidden: true },
+                            { path: '/table', component: 'nav1-Table', name: '用户信息' },
+                            { path: '/tableuser', component: 'nav1-TableServer', name: '服务器信息' },
+                            // { path: '/user', component: 'nav1-user', name: '列表' }
+                            // { path: '/privilege', component: 'nav1-privilege', name: '权限' }
                         ]
                     },
                     {
@@ -148,7 +162,30 @@
                           name: '安装引导',
                           iconCls: 'fa fa-id-card-o',
                           children: [
-                              { path: '/page4', component: 'nav2-Page4', name: '安装引导' },
+                              { path: '/page4', component: 'nav2-Page4', name: '收集客户端安装' },
+                          ]
+                      },
+                      {
+                          path: '/',
+                          component: 'Home',
+                          name: '分析数据及可视化    ',
+                          iconCls: 'fa fa-bar-chart',
+                          children: [
+                              { path: '/echarts', component: 'charts-code', name: '网站状态码' },
+                              // { path: '/echarts-topIP', component: topBrowser, name: 'topBrowser' },
+                              { path: '/echarts-topIP2', component: 'charts-topBrowser2', name: '浏览器占比' },
+                              { path: '/echarts-pvuv', component: 'charts-vPU', name: '活跃度与用户量'},
+                              { path: '/topIP', component: 'charts-topIP', name: 'Top访问量IP'},
+                              // { path: '/uv', component: uv, name: 'uv'},
+                              { path: '/map', component: 'charts-map', name: '访问分布图'},
+                              {
+                                  path: '/response-time',
+                                  component: 'charts-Responsetime',
+                                  name: '重要访问页',
+                                  children: [
+                                      { path: '/echarts', component: 'charts-code', name: '网站状态码' }
+                                  ]
+                              }
                           ]
                       },
                       {
@@ -160,24 +197,9 @@
                               { path: '/main', component: 'Main', name: '主页', hidden: true },
                               // { path: '/table', component: 'nav1-Table', name: '用户信息' },
                               // { path: '/tableuser', component: 'nav1-TableServer', name: '服务器信息' },
-                              { path: '/user', component: 'nav1-user', name: '服务器信息' }
+                              { path: '/user', component: 'nav1-user', name: '服务器信息' },
+                              { path: '/selftable', component: 'nav1-SelfTable', name: '个人信息' },
                               // { path: '/privilege', component: 'nav1-privilege', name: '权限' }
-                          ]
-                      },
-                      {
-                          path: '/',
-                          component: 'Home',
-                          name: '数据可视化    ',
-                          iconCls: 'fa fa-bar-chart',
-                          children: [
-                              { path: '/echarts', component: 'charts-code', name: '网站状态码' },
-                              // { path: '/echarts-topIP', component: topBrowser, name: 'topBrowser' },
-                              { path: '/echarts-topIP2', component: 'charts-topBrowser2', name: '浏览器占比' },
-                              { path: '/echarts-pvuv', component: 'charts-vPU', name: '活跃度与用户量'},
-                              { path: '/topIP', component: 'charts-topIP', name: 'Top访问量IP'},
-                              // { path: '/uv', component: uv, name: 'uv'},
-                              { path: '/map', component: 'charts-map', name: '访问分布图'},
-                              { path: '/response-time', component: 'charts-Responsetime', name: '重要访问页'}
                           ]
                       },
                       {

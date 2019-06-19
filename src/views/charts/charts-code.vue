@@ -69,7 +69,7 @@
                             name: '状态码',
                             type: 'pie',
                             radius: '55%',
-                            center: ['50%', '60%'],
+                            center: ['50%', '60%'],//X,Y
                             data: [
                                 // { value: data[1], name: data[0] },
                                 // { value: data[3], name: data[2] },

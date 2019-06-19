@@ -13,8 +13,8 @@
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
+						<!--<el-dropdown-item>我的消息</el-dropdown-item>-->
+						<!--<el-dropdown-item>设置</el-dropdown-item>-->
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -32,8 +32,11 @@
 						<!--<el-submenu :index="index+''" v-if="!item.leaf">-->
 						<el-submenu :index="index+''">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
+								{{child.name}}
+							</el-menu-item>
 						</el-submenu>
+						<!--最外层菜单-->
 						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
 					</template>
 				</el-menu>
@@ -48,9 +51,9 @@
 							</ul>
 						</template>
 						<template v-else>
-							<li class="el-submenu">
+							<!--<li class="el-submenu">-->
 								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>
-							</li>
+							<!--</li>-->
 						</template>
 					</li>
 				</ul>
@@ -81,7 +84,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'NGINX LOG',
+				sysName:'NGINX 日志系统',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -95,7 +98,15 @@
 					resource: '',
 					desc: ''
 				},
-				myroute: null
+				myroute: null,
+                //新增界面数据
+                addForm: {
+                    name: '',
+                    sex: -1,
+                    age: 0,
+                    birth: '',
+                    addr: ''
+                }
 			}
 		},
 		methods: {

@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+					<el-input v-model="filters.name" placeholder="用户名"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
@@ -27,9 +27,9 @@
 			</el-table-column>
 			<el-table-column prop="username" label="用户名" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="name" label="姓名" width="100" sortable>
 			</el-table-column>
-			<!--<el-table-column prop="password" label="密码" width="120" sortable>-->
+			<!--<el-table-column prop="password" label="密码" width="100" sortable>-->
 			<!--</el-table-column>-->
 			<!--<el-table-column prop="avatar" label="头像" width="120" sortable>-->
 			<!--</el-table-column>-->
@@ -63,6 +63,16 @@
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="角色" prop="role">
+					<!--<el-input v-model="addForm.role" auto-complete="off"></el-input>-->
+					<el-radio-group v-model="editForm.role">
+						<el-radio class="radio" :label="1">user</el-radio>
+						<el-radio class="radio" :label="0">admin</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<!--<el-form-item label="密码" prop="password">-->
+					<!--<el-input type="password" v-model="addForm.password" auto-complete="off" placeholder="密码"></el-input>-->
+				<!--</el-form-item>-->
 				<el-form-item label="是否发布">
 					<el-radio-group v-model="editForm.published">
 						<el-radio class="radio" :label="1">是</el-radio>
@@ -92,6 +102,9 @@
 						<el-radio class="radio" :label="0">admin</el-radio>
 					</el-radio-group>
 				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input type="password" v-model="addForm.password" auto-complete="off" placeholder="密码"></el-input>
+				</el-form-item>
 				<el-form-item label="是否发布">
 					<el-radio-group v-model="addForm.published">
 						<el-radio class="radio" :label="1">是</el-radio>
@@ -110,7 +123,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getServerListPage, getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
 
 	export default {
 		data() {
@@ -136,6 +149,7 @@
 					id: 0,
 					name: '',
 					published: 1,
+                    password:'',
 				},
 
 				addFormVisible: false,//新增界面是否显示

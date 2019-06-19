@@ -43,8 +43,12 @@
                 }else {
                     getAddr(para).then((res) => {
                         this.test = res.data;
-                        alert("您查询的ip位于 "  + res.data.data[0] + " : " +res.data.data[1]);
-                        return res.data.data;
+                        if (res.data.code !== 200){
+                            alert("查询IP失败");
+                        } else {
+                            alert("您查询的ip位于 "  + res.data.data[0] + " : " +res.data.data[1]);
+                            return res.data.data;
+                        }
                     });
                 }
             },
@@ -98,7 +102,7 @@
                         {
                             type : 'category',
                             // data : [data[0],'印尼','美国','印度','中国','世界人口(万)']
-                            data : [data[0],data[2],data[4],data[6],data[8],data[10]]
+                            data : [data[0],data[2],data[4],data[6],data[8]]
                         }
                     ],
                     series : [
@@ -107,14 +111,8 @@
                             name:'累计次数',
                             type:'bar',
                             // data:[18203, 23489, 29034, 104970, 131744, 630230]
-                            data:[data[1], data[3], data[5], data[7], data[9], data[11]]
+                            data:[data[1], data[3], data[5], data[7], data[9]]
                          }
-                        //  ,
-                        // {
-                        //     name:'2012年',
-                        //     type:'bar',
-                        //     data:[19325, 23438, 31000, 121594, 134141, 681807]
-                        // }
                     ]
                 });
             },

@@ -7,7 +7,7 @@
                     <el-input v-model="filters.name" placeholder="服务器名"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getUsers">查询</el-button>
+                    <el-button type="primary" v-on:click="getServerByName">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
@@ -61,6 +61,9 @@
                 <el-form-item label="日志地址" prop="logPath">
                     <el-input v-model="editForm.logPath" auto-complete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="主机" prop="logPath">
+                    <el-input v-model="editForm.host" auto-complete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="是否运行">
                     <el-radio-group v-model="editForm.published">
                         <el-radio class="radio" :label="1">运行</el-radio>
@@ -104,7 +107,7 @@
 <script>
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
-    import {getServerListPage, editServer ,removeServer ,addServer, batchRemoveServer, getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
+    import {getServerListPage, editServer ,removeServer ,addServer, batchRemoveServer, getServerLikeName, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
 
     export default {
         data() {
@@ -164,6 +167,17 @@
             handleCurrentChange(val) {
                 this.page = val;
                 this.getUsers();
+            },
+            //通过名字模糊查询
+            getServerByName: function (){
+                let para = {
+                    name: this.filters.name,
+                };
+                this.loading = true;
+                getServerLikeName(para).then((res)=>{
+                    this.servers = res.data.data;
+                    this.loading = false;
+                });
             },
             //获取用户列表
             getUsers() {
@@ -272,6 +286,7 @@
                                         message: '提交成功',
                                         type: 'success'
                                     });
+                                    alert('您的服务器ID为:'+res.data+ '');
                                 }
                                 this.$refs['addForm'].resetFields();
                                 this.addFormVisible = false;

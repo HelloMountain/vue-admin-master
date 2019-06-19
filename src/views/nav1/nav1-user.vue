@@ -7,7 +7,7 @@
 					<el-input v-model="filters.name" placeholder="服务器名"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUser">查询</el-button>
+					<el-button type="primary" v-on:click="getServerByName">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -38,8 +38,7 @@
 </template>
 <script>
     import util from '../../common/js/util'
-    import { getUserList } from '../../api/api';
-	import { getServerListPage } from '../../api/api';
+    import {getServerLikeName, getServerListPage} from '../../api/api';
     //import NProgress from 'nprogress'  //进度条
 	export default {
 		data() {
@@ -66,6 +65,17 @@
 			formatSex: function (row, column) {
                 return row.published == true ? '是' : row.published == false ? '否' : '否';
             },
+			//通过名字模糊查询
+			getServerByName: function (){
+              let para = {
+                  name: this.filters.name,
+			  };
+			  this.loading = true;
+			  getServerLikeName(para).then((res)=>{
+			      this.servers = res.data.data;
+			      this.loading = false;
+			  });
+			},
 			//获取用户列表
 			getUser: function () {
 			    // alert(sessionStorage.getItem("name"));
@@ -73,8 +83,7 @@
 				// 即脚本开始运行时，变量已经存在了，但是没有值，所以会输出undefined，
                 //而let不会发生变量提升,这表示在声明它之前，变量是不存在的，这时如果用到它，就会抛出一个错误
 				let para = {
-					name: this.filters.name,
-					userId: 1
+					// name: this.filters.name,
 				};
 				this.loading = true;
 				// alert(para.name);

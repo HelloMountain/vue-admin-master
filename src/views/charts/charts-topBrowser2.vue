@@ -57,20 +57,20 @@
                         orient: 'vertical',
                         left: 'left',
                         // data: ['200', '404', '503', '304', '400']
-                        data: [this.mydata[0].browser, this.mydata[0].browser, this.mydata[0].browser, this.mydata[0].browser, this.mydata[0].browser]
+                        data: [this.mydata[0].browser, this.mydata[1].browser, this.mydata[2].browser, this.mydata[3].browser, this.mydata[4].browser]
                     },
                     series: [
                         {
-                            name: '状态码',
+                            name: '浏览器',
                             type: 'pie',
                             radius: '55%',
                             center: ['50%', '60%'],
                             data: [
                                 { value: this.mydata[0].num, name: this.mydata[0].browser },
-                                { value: this.mydata[0].num, name: this.mydata[0].browser },
-                                { value: this.mydata[0].num, name: this.mydata[0].browser },
-                                { value: this.mydata[0].num, name: this.mydata[0].browser },
-                                { value: this.mydata[0].num, name: this.mydata[0].browser }
+                                { value: this.mydata[1].num, name: this.mydata[1].browser },
+                                { value: this.mydata[2].num, name: this.mydata[2].browser },
+                                { value: this.mydata[3].num, name: this.mydata[3].browser },
+                                { value: this.mydata[4].num, name: this.mydata[4].browser }
                             ],
                             // data: this.mydata,
                             itemStyle: {

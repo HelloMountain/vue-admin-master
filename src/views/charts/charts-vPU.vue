@@ -85,7 +85,7 @@
         props:{
             value:{
                 type:String,
-                default:'2019-05-10' //生日 联系我可＋QQ:503305196
+                default:'2019-06-01' //生日 联系我可＋QQ:503305196
             }
         },
         data(){

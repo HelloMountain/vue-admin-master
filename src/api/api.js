@@ -10,9 +10,13 @@ export const getDefault = params => {return axios.get(`/api/default`, { params: 
 
 export const getUserListPage = params => {return axios.get(`${base}/api/user/list`, { params: params });};
 
+export const getSelfInfoPage = params => {return axios.get(`${base}/api/user/selfInfo`, { params: params });};
+
 export const getPriListPage = params => {return axios.get(`${base}/api/admin/privilege/findAll`, { params: params });};
 
 export const getServerListPage = params => { return axios.get(`${base}/api/nginx/findAll`, { params: params }); };
+
+export const getServerLikeName = params => { return axios.get(`${base}/api/nginx/findByName`, { params: params }); };
 
 export const removeUser = params => { return axios.get(`${base}/api/user/delete`, { params: params }); };
 
@@ -31,6 +35,8 @@ export const editServer = params => { return axios.post(`${base}/api/nginx/updat
 export const addUser = params => { return axios.post(`${base}/api/user/add`, params).then(res => res.data); };
 
 export const addServer = params => { return axios.post(`${base}/api/nginx/create`, params).then(res => res.data); };
+
+export const getServerById = params => { return axios.get(`${base}/api/nginx/findById`, { params: params }); };
 
 export const getCode = params => { return axios.get(`${base}/api/test/code`, { params: params }); };
 

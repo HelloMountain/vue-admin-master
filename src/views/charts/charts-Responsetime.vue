@@ -54,6 +54,8 @@
               let a = getResponseTime().then((res) => {
                   this.bar1data = res.data.data;
                   this.drawBarChart1();
+                  console.log(1);
+                  console.log(this.bar1data);
                   return res.data.data;
               });
                 return a;
@@ -61,7 +63,8 @@
             getTopUrl(){
                 let a = getTopUrl().then((res) => {
                     this.bar2data = res.data.data;
-                    // console.log(res.data.data);
+                    console.log(2);
+                    console.log(res.data.data);
                     this.drawBarChart2();
                     return res.data.data;
                 });
@@ -70,6 +73,7 @@
             getErrorUrl(){
                 let a = getErrorUrl().then((res) => {
                     this.bar3data = res.data.data;
+                    console.log(3);
                     console.log(res.data.data);
                     this.drawBarChart3();
                     return res.data.data;
@@ -77,13 +81,6 @@
                 return a;
             },
             getData(){
-                // let a =  getDataCode().then((res) => {
-                //     this.mydata = res.data.data;
-                //     this.data1 = [this.mydata[0], this.mydata[0], this.mydata[0], this.mydata[0], this.mydata[0]];
-                //
-                //     return res.data.data;
-                // });
-                // return a;
                 this.getResponse();
                 this.getTopUrl();
                 this.getErrorUrl();
@@ -95,19 +92,24 @@
                         text: '响应时间',
                         subtext: ''
                     },
-                    tooltip: {
+                    tooltip: {//鼠标停留在上面会显示
+                        position:[0,0],
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
                         }
                     },
                     legend: {
-                        data: ['2012年']
+                        orient: 'vertical',
+                        x: '80%',
+                        y: '20%',
+                        // data: ['页面5', '页面4', '页面3', '页面2', '页面1']
+                        data: [this.bar1data[0].url, this.bar1data[1].url, this.bar1data[2].url, this.bar1data[3].url, this.bar1data[4].url]
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
+                        left: '10%',
+                        right: '20%',
+                        bottom: '10%',
                         containLabel: true
                     },
                     xAxis: [{
@@ -115,20 +117,36 @@
                     }],
                     yAxis: [{
                         type: 'category',
-                        // data: [this.bar1data[0].url, '印尼', '美国', '印度', '中国', '世界人口(万)']
-                        data: [this.bar1data[0].url, this.bar1data[1].url, this.bar1data[2].url,
-                            this.bar1data[3].url, this.bar1data[4].url, this.bar1data[5].url,this.bar1data[6].url,
-                            this.bar1data[7].url,this.bar1data[8].url,this.bar1data[8].url]
+                        data: ['页面5', '页面4', '页面3', '页面2', '页面1']
                     }],
                     series: [
                         {
-                            name: '2011年',
+                            name: this.bar1data[4].url,
                             type: 'bar',
-                            data: [this.bar1data[0].responsetime, this.bar1data[1].responsetime, this.bar1data[2].responsetime,
-                                this.bar1data[3].responsetime, this.bar1data[4].responsetime, this.bar1data[5].responsetime,
-                                this.bar1data[6].responsetime,this.bar1data[7].responsetime,this.bar1data[8].responsetime,
-                                this.bar1data[9].responsetime]
+                            data:[this.bar1data[4].responsetime,,,,]
+
+                        },
+                        {
+                            name: this.bar1data[3].url,
+                            type: 'bar',
+                            data:[,this.bar1data[3].responsetime,,,]
+                        },
+                        {
+                            name: this.bar1data[2].url,
+                            type: 'bar',
+                            data:[,,this.bar1data[2].responsetime,,]
+                        },
+                        {
+                            name: this.bar1data[1].url,
+                            type: 'bar',
+                            data:[,,,this.bar1data[1].responsetime,]
+                        },
+                        {
+                            name: this.bar1data[0].url,
+                            type: 'bar',
+                            data:[,,,,this.bar1data[0].responsetime]
                         }
+
                     ]
                 });
             },
@@ -139,76 +157,130 @@
                         text: '访问最多',
                         subtext: ''
                     },
-                    tooltip: {
+                    tooltip: {//鼠标停留在上面会显示
+                        position:[0,0],
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
                         }
                     },
+                    // legend: {
+                    //     data: ['2011年']
+                    // },
                     legend: {
-                        data: ['2012年']
+                        orient: 'vertical',
+                        x: '80%',
+                        y: '20%',
+                        data: [this.bar2data[0].url, this.bar2data[1].url, this.bar2data[2].url, this.bar2data[3].url, this.bar2data[4].url]
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '30%',
+                        left: '10%',
+                        right: '20%',
+                        bottom: '10%',
                         containLabel: true
                     },
-                    xAxis: {
-                        type: 'value',
+                    xAxis: [{
                         boundaryGap: [0, 0.01]
-                    },
-                    yAxis: {
+                    }],
+                    yAxis: [{
                         type: 'category',
-                        data: [this.bar2data[0].url, this.bar2data[1].url, this.bar2data[2].url, this.bar2data[3].url,this.bar2data[4].url]
-                    },
+                        data: ['页面5', '页面4', '页面3', '页面2', '页面1']
+                    }],
                     series: [
                         {
-                            name: '2011年',
+                            name: this.bar2data[4].url,
                             type: 'bar',
-                            data: [this.bar2data[0].num, this.bar2data[1].num, this.bar2data[2].num, this.bar2data[3].num, this.bar2data[4].num]
+                            data:[this.bar2data[4].num,,,,]
+
+                        },
+                        {
+                            name: this.bar2data[3].url,
+                            type: 'bar',
+                            data:[,this.bar2data[3].num,,,]
+                        },
+                        {
+                            name: this.bar2data[2].url,
+                            type: 'bar',
+                            data:[,,this.bar2data[2].num,,]
+                        },
+                        {
+                            name: this.bar2data[1].url,
+                            type: 'bar',
+                            data:[,,,this.bar2data[1].num,]
+                        },
+                        {
+                            name: this.bar2data[0].url,
+                            type: 'bar',
+                            data:[,,,,this.bar2data[0].num]
                         }
+
                     ]
                 });
             },
             drawBarChart3() {
-                console.log(this.bar3data);
                 this.chartBar3 = echarts.init(document.getElementById('chartBar3'));
                 this.chartBar3.setOption({
                     title: {
                         text: '错误页面',
                         subtext: ''
                     },
-                    tooltip: {
+                    tooltip: {//鼠标停留在上面会显示
+                        position:[0,20],
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
                         }
                     },
+                    // legend: {
+                    //     data: ['2011年']
+                    // },
                     legend: {
-                        data: ['2012年']
+                        orient: 'vertical',
+                        x: '80%',
+                        y: '20%',
+                        data: [this.bar3data[0].url, this.bar3data[1].url, this.bar3data[2].url, this.bar3data[3].url, this.bar3data[4].url]
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '30%',
+                        left: '10%',
+                        right: '20%',
+                        bottom: '10%',
                         containLabel: true
                     },
-                    xAxis: {
-                        type: 'value',
+                    xAxis: [{
                         boundaryGap: [0, 0.01]
-                    },
-                    yAxis: {
+                    }],
+                    yAxis: [{
                         type: 'category',
-                        // data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
-                        data: [this.bar3data[0].url, this.bar3data[1].url, this.bar3data[2].url]
-                    },
+                        data: ['页面5', '页面4', '页面3', '页面2', '页面1']
+                    }],
                     series: [
                         {
-                            name: '2011年',
+                            name: this.bar3data[4].url,
                             type: 'bar',
-                            data: [this.bar3data[0].num, this.bar3data[1].num, this.bar3data[2].num]
+                            data:[this.bar3data[4].num,,,,]
+
+                        },
+                        {
+                            name: this.bar3data[3].url,
+                            type: 'bar',
+                            data:[,this.bar3data[3].num,,,]
+                        },
+                        {
+                            name: this.bar3data[2].url,
+                            type: 'bar',
+                            data:[,,this.bar3data[2].num,,]
+                        },
+                        {
+                            name: this.bar3data[1].url,
+                            type: 'bar',
+                            data:[,,,this.bar3data[1].num,]
+                        },
+                        {
+                            name: this.bar3data[0].url,
+                            type: 'bar',
+                            data:[,,,,this.bar3data[0].num]
                         }
+
                     ]
                 });
             },

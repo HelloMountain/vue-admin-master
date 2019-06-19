@@ -46,7 +46,7 @@
                 let myChart = echarts.init(this.$refs.myEchart); //这里是为了获得容器所在位置
                 window.onresize = myChart.resize;
                 myChart.setOption({ // 进行相关配置
-                    backgroundColor: "#45b1db",
+                    backgroundColor: "#e8ffff",
                     title: {
                         text: '访问分布图',
                         subtext: '',
@@ -92,7 +92,7 @@
                         coordinateSystem: 'geo' // 对应上方配置
                     },
                         {
-                            name: '启动次数', // 浮动框的标题
+                            name: '访问次数', // 浮动框的标题
                             type: 'map',
                             geoIndex: 0,
                             data: data
